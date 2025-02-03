@@ -1,9 +1,12 @@
-from torch_geometric.nn import PointConv
+# from torch_geometric.nn import PointConv  Dropped PyG 2.2.0 -> 2.3.0
+from torch_geometric.nn import PointNetConv
 
 from torch_points3d.core.base_conv.base_conv import *
 from torch_points3d.core.base_conv.message_passing import *
 from torch_points3d.core.common_modules.base_modules import *
-from torch_points3d.core.spatial_ops import FPSSampler, RandomSampler, MultiscaleRadiusNeighbourFinder
+from torch_points3d.core.spatial_ops import (FPSSampler,
+                                             MultiscaleRadiusNeighbourFinder,
+                                             RandomSampler)
 
 
 class SAModule(BaseMSConvolutionDown):
@@ -17,7 +20,7 @@ class SAModule(BaseMSConvolutionDown):
 
         local_nn = MLP(down_conv_nn) if down_conv_nn is not None else None
 
-        self._conv = PointConv(local_nn=local_nn, global_nn=None)
+        self._conv = PointNetConv(local_nn=local_nn, global_nn=None)
         self._radius = radius
         self._ratio = ratio
         self._num_points = radius_num_point
